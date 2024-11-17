@@ -15,36 +15,36 @@ pipeline {
         }
 
 
-    //     stage('Build Docker Images') {
-    //         steps {
-    //             script {
-    //                 sh 'docker-compose -f docker-compose.yml build'
-    //             }
-    //         }
-    //     }
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-compose.yml build'
+                }
+            }
+        }
 
-    //     stage('Start Containers') {
-    //         steps {
-    //             script {
-    //                 sh 'docker-compose -f docker-compose.yml up -d'
-    //             }
-    //         }
-    //     }
+        stage('Start Containers') {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-compose.yml up -d'
+                }
+            }
+        }
 
-    //     stage('Run Tests') {
-    //         steps {
-    //             script {
-    //                 sh 'echo "Running tests..."'  // Replace with your actual test commands
-    //             }
-    //         }
-    //     }
+        stage('Run Tests') {
+            steps {
+                script {
+                    sh 'echo "Running tests..."'  // Replace with your actual test commands
+                }
+            }
+        }
 
-    //     stage('Stop Containers') {
-    //         steps {
-    //             script {
-    //                 sh 'docker-compose -f docker-compose.yml down'
-    //             }
-    //         }
-    //     }
+        stage('Stop Containers') {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-compose.yml down'
+                }
+            }
+        }
     }
 }
