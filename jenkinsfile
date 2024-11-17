@@ -9,30 +9,27 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    sh 'docker build -t mongodb ./mongodb'
-                    sh 'docker build -t server ./server'
-                    sh 'docker build -t client ./client'
+                    sh 'docker-compose -f docker-compose.yml build'
                 }
             }
         }
         stage('Start Containers') {
             steps {
                 script {
-                    sh 'docker run -d --name mongodbtest1 mongodb'
-                    sh 'docker run -d --name server1 --link mongodbtest1 server'
-                    sh 'docker run -d --name client1 --link server1 client'
+                    sh 'docker-compose -f docker-compose.yml up -d'
                 }
             }
         }
         stage('Run Tests') {
             steps {
-                // Add your testing commands here
+                // Define steps for testing here
             }
         }
         stage('Stop Containers') {
             steps {
-                sh 'docker stop client1 server1 mongodbtest1'
-                sh 'docker rm client1 server1 mongodbtest1'
+                script {
+                    sh 'docker-compose -f docker-compose.yml down'
+                }
             }
         }
     }
