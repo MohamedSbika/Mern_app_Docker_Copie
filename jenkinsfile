@@ -1,48 +1,55 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_COMPOSE_PATH = '/usr/local/bin/docker-compose'  // Set path to docker-compose if needed
+        IMAGE_NAME = 'mern_app_docker'
+    }
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
-        // stage('Build Images') {
-        //     agent {
-        //         docker {
-        //             image 'docker/compose:latest' // L'image Docker Compose que vous souhaitez utiliser
-        //             args '-v /var/run/docker.sock:/var/run/docker.sock' // Monter le socket Docker
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             // Utilisation de l'image docker/compose pour exécuter les commandes Docker Compose
-        //             sh '''
-        //             docker run --rm \
-        //                 -v $PWD:/app \
-        //                 -w /app \
-        //                 docker/compose:latest build
-        //             '''
-        //         }
-        //     }
-        // }
-        // stage('Tag Images') {
-        //     steps {
-        //         script {
-        //             sh 'docker tag server1 mohamedsbika/mern_app_server:latest'
-        //             sh 'docker tag client1 mohamedsbika/mern_app_client:latest'
-        //         }
-        //     }
-        // }
-        // stage('Push to Docker Hub') {
-        //     steps {
-        //         script {
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        //                 sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-        //                 sh 'docker push mohamedsbika/mern_app_server:latest'
-        //                 sh 'docker push mohamedsbika/mern_app_client:latest'
-        //             }
-        //         }
-        //     }
-        // }
+        
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    // Building the docker images using docker-compose
+                    sh 'docker-compose -f docker-compose.yml build'
+                }
+            }
+        }
+
+        stage('Start Containers') {
+            steps {
+                script {
+                    // Starting the containers using docker-compose
+                    sh 'docker-compose -f docker-compose.yml up -d'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Add testing commands if needed (e.g., run unit tests, integration tests, etc.)
+                echo 'Running tests...'
+            }
+        }
+
+        stage('Stop Containers') {
+            steps {
+                script {
+                    // Stopping the containers after the job is done
+                    sh 'docker-compose -f docker-compose.yml down'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup actions (e.g., remove any temporary files, stop running containers, etc.)
+            echo 'Cleaning up...'
+        }
     }
 }
