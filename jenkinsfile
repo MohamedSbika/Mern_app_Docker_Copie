@@ -3,46 +3,57 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
+                // Cloner le dépôt GitHub
+                git url: 'https://github.com/yourusername/yourrepository.git', branch: 'main'
             }
         }
-        stage('Build Images') {
-            agent {
-                docker {
-                    image 'docker/compose:latest' // L'image Docker Compose que vous souhaitez utiliser
-                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Monter le socket Docker
-                }
-            }
+
+        stage('Build Docker Images') {
             steps {
                 script {
-                    // Utilisation de l'image docker/compose pour exécuter les commandes Docker Compose
-                    sh '''
-                    docker run --rm \
-                        -v $PWD:/app \
-                        -w /app \
-                        docker/compose:latest build
-                    '''
+                    // Construire les images Docker avec Docker Compose
+                    sh 'docker-compose -f docker-compose.yml build'
                 }
             }
         }
-        // stage('Tag Images') {
-        //     steps {
-        //         script {
-        //             sh 'docker tag server1 mohamedsbika/mern_app_server:latest'
-        //             sh 'docker tag client1 mohamedsbika/mern_app_client:latest'
-        //         }
-        //     }
-        // }
-        // stage('Push to Docker Hub') {
-        //     steps {
-        //         script {
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        //                 sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-        //                 sh 'docker push mohamedsbika/mern_app_server:latest'
-        //                 sh 'docker push mohamedsbika/mern_app_client:latest'
-        //             }
-        //         }
-        //     }
-        // }
+
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Lancer les tests pour le backend
+                    sh 'docker-compose -f docker-compose.yml run server npm test'
+                    
+                    // Lancer les tests pour le frontend
+                    sh 'docker-compose -f docker-compose.yml run client npm test'
+                }
+            }
+        }
+
+        stage('Start Services') {
+            steps {
+                script {
+                    // Démarrer les services avec Docker Compose
+                    sh 'docker-compose -f docker-compose.yml up -d'
+                }
+            }
+        }
+
+        stage('Post-Deployment Cleanup') {
+            steps {
+                script {
+                    // Optionnel: Nettoyer après le déploiement
+                    sh 'docker-compose -f docker-compose.yml down'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build, tests et déploiement réussis !'
+        }
+        failure {
+            echo 'Le pipeline a échoué.'
+        }
     }
 }
