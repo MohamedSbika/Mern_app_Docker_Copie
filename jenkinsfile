@@ -6,45 +6,35 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
+
         stage('Test Docker') {
             steps {
-                script {
-                    sh 'docker --version'
-                }
+                bat 'docker --version'
             }
         }
 
+        // stage('Build Docker Images') {
+        //     steps {
+        //         bat 'docker-compose -f docker-compose.yml build'
+        //     }
+        // }
 
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    sh 'docker-compose -f docker-compose.yml build'
-                }
-            }
-        }
+        // stage('Start Containers') {
+        //     steps {
+        //         bat 'docker-compose -f docker-compose.yml up -d'
+        //     }
+        // }
 
-        stage('Start Containers') {
-            steps {
-                script {
-                    sh 'docker-compose -f docker-compose.yml up -d'
-                }
-            }
-        }
+        // stage('Run Tests') {
+        //     steps {
+        //         bat 'echo Running tests...'  // Remplacez ceci par vos commandes de tests réelles
+        //     }
+        // }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    sh 'echo "Running tests..."'  // Replace with your actual test commands
-                }
-            }
-        }
-
-        stage('Stop Containers') {
-            steps {
-                script {
-                    sh 'docker-compose -f docker-compose.yml down'
-                }
-            }
-        }
+        // stage('Stop Containers') {
+        //     steps {
+        //         bat 'docker-compose -f docker-compose.yml down'
+        //     }
+        // }
     }
 }
