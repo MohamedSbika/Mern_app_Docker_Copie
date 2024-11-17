@@ -1,55 +1,39 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_COMPOSE_PATH = '/usr/local/bin/docker-compose'  // Set path to docker-compose if needed
-        IMAGE_NAME = 'mern_app_docker'
-    }
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
-        
         stage('Build Docker Images') {
             steps {
                 script {
-                    // Building the docker images using docker-compose
-                    sh 'docker-compose -f docker-compose.yml build'
+                    sh 'docker build -t mongodb ./mongodb'
+                    sh 'docker build -t server ./server'
+                    sh 'docker build -t client ./client'
                 }
             }
         }
-
         stage('Start Containers') {
             steps {
                 script {
-                    // Starting the containers using docker-compose
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                    sh 'docker run -d --name mongodbtest1 mongodb'
+                    sh 'docker run -d --name server1 --link mongodbtest1 server'
+                    sh 'docker run -d --name client1 --link server1 client'
                 }
             }
         }
-
         stage('Run Tests') {
             steps {
-                // Add testing commands if needed (e.g., run unit tests, integration tests, etc.)
-                echo 'Running tests...'
+                // Add your testing commands here
             }
         }
-
         stage('Stop Containers') {
             steps {
-                script {
-                    // Stopping the containers after the job is done
-                    sh 'docker-compose -f docker-compose.yml down'
-                }
+                sh 'docker stop client1 server1 mongodbtest1'
+                sh 'docker rm client1 server1 mongodbtest1'
             }
-        }
-    }
-
-    post {
-        always {
-            // Cleanup actions (e.g., remove any temporary files, stop running containers, etc.)
-            echo 'Cleaning up...'
         }
     }
 }
