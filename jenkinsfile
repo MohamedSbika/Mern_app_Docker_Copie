@@ -6,24 +6,16 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
-        stage('Install Docker Compose') {
+        stage('Build Images') {
             steps {
                 script {
+                    // Utilisation de l'image docker/compose pour exécuter les commandes Docker Compose
                     sh '''
-                    if ! command -v docker-compose &> /dev/null; then
-                        echo "Docker Compose not found, installing..."
-                        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                        sudo chmod +x /usr/local/bin/docker-compose
-                    fi
-                    docker-compose --version
+                    docker run --rm \
+                        -v $PWD:/app \
+                        -w /app \
+                        docker/compose:latest build
                     '''
-                }
-            }
-        }
-                stage('Build Images') {
-            steps {
-                script {
-                    sh '/usr/local/bin/docker-compose build'
                 }
             }
         }
@@ -43,8 +35,8 @@ pipeline {
         //                 sh 'docker push mohamedsbika/mern_app_server:latest'
         //                 sh 'docker push mohamedsbika/mern_app_client:latest'
         //             }
-                }
-            }
+        //         }
+        //     }
         // }
-    // }
-// }
+    }
+}
