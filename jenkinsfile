@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
+                git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
         stage('Build Images') {
