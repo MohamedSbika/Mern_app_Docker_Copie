@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
+            }
+        }
+        stage('Build Images') {
+            steps {
+                script {
+                    sh 'docker-compose build'
+                }
+            }
+        }
+        // stage('Tag Images') {
+        //     steps {
+        //         script {
+        //             sh 'docker tag server1 mohamedsbika/mern_app_server:latest'
+        //             sh 'docker tag client1 mohamedsbika/mern_app_client:latest'
+        //         }
+        //     }
+        // }
+        // stage('Push to Docker Hub') {
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+        //                 sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+        //                 sh 'docker push mohamedsbika/mern_app_server:latest'
+        //                 sh 'docker push mohamedsbika/mern_app_client:latest'
+        //             }
+                }
+            }
+        // }
+    // }
+// }
