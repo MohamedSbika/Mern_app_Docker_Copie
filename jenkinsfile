@@ -6,6 +6,14 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
+        stage('Test Docker') {
+            steps {
+                script {
+                    sh 'docker --version'
+                }
+            }
+        }
+
 
     //     stage('Build Docker Images') {
     //         steps {
