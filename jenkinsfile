@@ -6,6 +6,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
+
         stage('Build Docker Images') {
             steps {
                 script {
@@ -13,6 +14,7 @@ pipeline {
                 }
             }
         }
+
         stage('Start Containers') {
             steps {
                 script {
@@ -20,11 +22,15 @@ pipeline {
                 }
             }
         }
+
         stage('Run Tests') {
             steps {
-                // Define steps for testing here
+                script {
+                    sh 'echo "Running tests..."'  // Replace with your actual test commands
+                }
             }
         }
+
         stage('Stop Containers') {
             steps {
                 script {
