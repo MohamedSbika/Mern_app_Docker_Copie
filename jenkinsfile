@@ -7,6 +7,12 @@ pipeline {
             }
         }
         stage('Build Images') {
+            agent {
+                docker {
+                    image 'docker/compose:latest' // L'image Docker Compose que vous souhaitez utiliser
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Monter le socket Docker
+                }
+            }
             steps {
                 script {
                     // Utilisation de l'image docker/compose pour exécuter les commandes Docker Compose
