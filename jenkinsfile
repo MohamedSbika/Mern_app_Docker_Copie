@@ -13,28 +13,28 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Images') {
-        //     steps {
-        //         bat 'docker-compose -f docker-compose.yml build'
-        //     }
-        // }
+        stage('Build Docker Images') {
+            steps {
+                bat 'docker compose -f docker-compose.yml build'
+            }
+        }
 
-        // stage('Start Containers') {
-        //     steps {
-        //         bat 'docker-compose -f docker-compose.yml up -d'
-        //     }
-        // }
+        stage('Start Containers') {
+            steps {
+                bat 'docker compose -f docker-compose.yml up -d'
+            }
+        }
 
-        // stage('Run Tests') {
-        //     steps {
-        //         bat 'echo Running tests...'  // Remplacez ceci par vos commandes de tests réelles
-        //     }
-        // }
+        stage('Run Tests') {
+            steps {
+                bat 'echo Running tests...' 
+            }
+        }
 
-        // stage('Stop Containers') {
-        //     steps {
-        //         bat 'docker-compose -f docker-compose.yml down'
-        //     }
-        // }
+        stage('Stop Containers') {
+            steps {
+                bat 'docker compose -f docker-compose.yml down'
+            }
+        }
     }
 }
