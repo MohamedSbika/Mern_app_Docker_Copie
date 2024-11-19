@@ -15,25 +15,25 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                bat 'docker compose -f docker-compose.yml build'
+                sh 'docker compose -f docker-compose.yml build'
             }
         }
 
         stage('Start Containers') {
             steps {
-                bat 'docker compose -f docker-compose.yml up -d'
+                sh 'docker compose -f docker-compose.yml up -d'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'echo Running tests...' 
+                sh 'echo Running tests...' 
             }
         }
 
         stage('Stop Containers') {
             steps {
-                bat 'docker compose -f docker-compose.yml down'
+                sh 'docker compose -f docker-compose.yml down'
             }
         }
     }
