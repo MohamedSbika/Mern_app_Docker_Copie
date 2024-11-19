@@ -1,43 +1,40 @@
 pipeline {
     agent any
-
     stages {
-        stage("Checkout") {
+        stage('Clone Repository') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/MohamedSbika/Mern_app_Docker_Copie.git'
             }
         }
 
-        stage("Install Dependencies API") {
+        stage('Test Docker') {
             steps {
-                dir('server1') {
-                    sh 'npm install'
-                }
+                sh 'docker --version'
             }
         }
 
-        stage("Install Dependencies Client") {
-            steps {
-                dir('client1') {
-                    sh 'npm install'
-                }
-            }
-        }
+        // stage('Build Docker Images') {
+        //     steps {
+        //         bat 'docker compose -f docker-compose.yml build'
+        //     }
+        // }
 
-        stage("Build Docker Images and Run Containers") {
-            steps {
-                script {
-                    // Construire les images et démarrer les conteneurs
-                    sh 'docker compose up --build -d'
-                }
-            }
-        }
-    }
+        // stage('Start Containers') {
+        //     steps {
+        //         bat 'docker compose -f docker-compose.yml up -d'
+        //     }
+        // }
 
-    post {
-        always {
-            // Arrêter les conteneurs après la construction
-            sh 'docker compose down'
-        }
+        // stage('Run Tests') {
+        //     steps {
+        //         bat 'echo Running tests...' 
+        //     }
+        // }
+
+        // stage('Stop Containers') {
+        //     steps {
+        //         bat 'docker compose -f docker-compose.yml down'
+        //     }
+        // }
     }
 }
