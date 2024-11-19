@@ -15,13 +15,13 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker compose -f docker-compose.yml build'
+                sh 'sudo docker compose -f docker-compose.yml build'
             }
         }
 
         stage('Start Containers') {
             steps {
-                sh 'docker compose -f docker-compose.yml up -d'
+                sh 'sudo docker compose -f docker-compose.yml up -d'
             }
         }
 
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Stop Containers') {
             steps {
-                sh 'docker compose -f docker-compose.yml down'
+                sh 'sudo docker compose -f docker-compose.yml down'
             }
         }
     }
